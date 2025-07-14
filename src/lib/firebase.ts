@@ -3,9 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
+  apiKey: "AIzaSyCgvOhAOhwHkTrVcncaqfFX0TTFXDCcqJI",
+  authDomain: "test1-3fc5c.firebaseapp.com",
+  projectId: "test1-3fc5c",
   // 기타 설정들...
 };
 
