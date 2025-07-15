@@ -20,7 +20,8 @@
 					email: firebaseUser.email,
 					displayname: firebaseUser.displayName,
 					photourl: firebaseUser.photoURL,
-					providerid: firebaseUser.providerId
+					providerid: firebaseUser.providerId,
+					idtoken: firebaseUser?.getIdToken() ?? ''
 				} // ✅ body에 들어갈 객체
 			);
 			response = response?.data;
