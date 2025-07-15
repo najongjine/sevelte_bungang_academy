@@ -9,7 +9,7 @@
 			const result = await signInWithPopup(auth, provider);
 			const firebaseUser = result.user;
 			console.log('✅ 로그인 성공:', user);
-			user.set(firebaseUser);
+			//user.set(firebaseUser);
 			alert(`환영합니다! ${firebaseUser?.displayName}`);
 		} catch (error: any) {
 			console.error('❌ 로그인 실패:', error?.message);
@@ -20,7 +20,7 @@
 
 <div>
 	{#if $user}
-		<p>환영합니다, {$user.displayName}님!</p>
+		<p>환영합니다, {$user?.displayname}님!</p>
 	{:else}
 		<p>로그인이 필요합니다.</p>
 		<button on:click={loginWithGoogle}> Google로 로그인 </button>
