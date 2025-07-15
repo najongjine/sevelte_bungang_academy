@@ -3,12 +3,27 @@
 	import type { User } from 'firebase/auth';
 	import { signInWithPopup } from 'firebase/auth';
 	import { user } from '$lib/stores/userStore';
+	import axios from 'axios';
+
+	const api = import.meta.env.VITE_SERVER_API_URL;
 
 	async function loginWithGoogle() {
 		try {
 			const result = await signInWithPopup(auth, provider);
 			const firebaseUser = result.user;
+			firebaseUser.getIdToken();
 			console.log('✅ 로그인 성공:', user);
+			let response = await axios.post(
+				`${api}/api/auth/login`, // ✅ 요청할 서버 주소
+				{
+					uid: firebaseUser.uid,
+					email: firebaseUser.email,
+					displayname: firebaseUser.displayName,
+					photourl: firebaseUser.photoURL,
+					providerid: firebaseUser.providerId
+				} // ✅ body에 들어갈 객체
+			);
+			response = response?.data;
 			//user.set(firebaseUser);
 			alert(`환영합니다! ${firebaseUser?.displayName}`);
 		} catch (error: any) {
