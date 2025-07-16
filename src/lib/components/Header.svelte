@@ -2,7 +2,7 @@
 <script lang="ts">
 </script>
 
-<header style="background: #eee; padding: 1rem;">
+<header>
 	<!-- 헤더 -->
 	<div class="w-full border-b px-4 py-3 flex items-center gap-4">
 		<h1 class="text-xl font-bold text-black">나의장터</h1>
