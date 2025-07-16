@@ -28,6 +28,7 @@
 			if (!response?.success) {
 				console.error('❌ 로그인 실패:', response?.message);
 				alert(`로그인 중 오류 발생!. ${response?.message}`);
+				return;
 			}
 			console.log(`## response: `, response?.data);
 			user.set(response?.data);
