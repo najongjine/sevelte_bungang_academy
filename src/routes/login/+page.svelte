@@ -13,7 +13,7 @@
 			const firebaseUser = result.user;
 			firebaseUser.getIdToken();
 			console.log('✅ 로그인 성공:', firebaseUser);
-			let response = await axios.post(
+			let response: any = await axios.post(
 				`${api}/api/auth/login`, // ✅ 요청할 서버 주소
 				{
 					uid: firebaseUser.uid,
@@ -25,8 +25,12 @@
 				} // ✅ body에 들어갈 객체
 			);
 			response = response?.data;
-			console.log(`## response: `, response);
-			//user.set(firebaseUser);
+			if (!response?.success) {
+				console.error('❌ 로그인 실패:', response?.message);
+				alert(`로그인 중 오류 발생!. ${response?.message}`);
+			}
+			console.log(`## response: `, response?.data);
+			user.set(response?.data);
 			alert(`환영합니다! ${firebaseUser?.displayName}`);
 		} catch (error: any) {
 			console.error('❌ 로그인 실패:', error?.message);
@@ -46,8 +50,8 @@
 
 <div>
 	{#if $user}
-		<p>환영합니다, {$user?.displayname}님!</p>
-		<button on:click={logout}> Google로 로그인 </button>
+		<p>환영합니다, {$user?.userData.displayname}님!</p>
+		<button on:click={logout}> logout </button>
 	{:else}
 		<p>로그인이 필요합니다.</p>
 		<button on:click={loginWithGoogle}> Google로 로그인 </button>

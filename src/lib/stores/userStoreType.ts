@@ -1,3 +1,8 @@
+export interface UserType {
+	userData: UserData;
+	userToken: string;
+}
+
 export interface UserRole {
 	role_idp: string;
 	user_idp: string;
@@ -5,7 +10,7 @@ export interface UserRole {
 	created_dt: string; // 또는 Date 타입을 원하면 Date
 }
 
-export interface UserType {
+export interface UserData {
 	idp: string;
 	uid: string;
 	email: string;
