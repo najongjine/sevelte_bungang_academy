@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Banner from '$lib/components/Banner.svelte';
+	import ProductList from '$lib/components/ProductList.svelte';
+
 	const products = [
 		{
 			title: '방탄 2016여름 패키지 화보',
@@ -63,30 +66,6 @@
 	];
 </script>
 
-<!-- 배너 -->
-<div class="bg-blue-500 text-white text-center py-6 px-4">
-	<h2 class="text-lg font-semibold">📦 첫 구매 할인</h2>
-	<p class="mt-1">메루카리 최대 1만 원 쿠폰 받아 가세요</p>
-	<div class="flex justify-center gap-6 mt-4">
-		<div class="bg-white text-black px-6 py-3 rounded shadow text-sm">
-			5만 원 이상 구매 시 <span class="font-bold text-lg">5,000</span>
-		</div>
-		<div class="bg-black text-white px-6 py-3 rounded shadow text-sm">
-			10만 원 이상 구매 시 <span class="font-bold text-lg">10,000</span>
-		</div>
-	</div>
-</div>
+<Banner />
 
-<!-- 상품 목록 -->
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
-	{#each products as p}
-		<div class="border rounded shadow-sm hover:shadow-md transition">
-			<img src={p.img} alt={p.title} class="w-full h-auto" />
-			<div class="p-2">
-				<h3 class="text-sm font-medium truncate">{p.title}</h3>
-				<p class="text-red-500 font-bold mt-1">{p.price}</p>
-				<p class="text-gray-500 text-xs mt-1">{p.time}</p>
-			</div>
-		</div>
-	{/each}
-</div>
+<ProductList {products} />
