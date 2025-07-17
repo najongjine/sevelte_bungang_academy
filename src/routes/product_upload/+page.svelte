@@ -29,6 +29,7 @@
 		images = images.filter((_, i) => i !== index);
 		imagePreviews = imagePreviews.filter((_, i) => i !== index);
 	}
+
 	async function handleSubmit() {
 		if (!productName || !productDescription || images.length === 0) {
 			alert('모든 필드를 입력해주세요.');
