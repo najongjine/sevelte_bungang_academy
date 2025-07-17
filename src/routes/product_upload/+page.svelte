@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { VITE_SERVER_API_URL } from '$env/static/private';
+	import { user } from '$lib/stores/userStore';
+	import axios from 'axios';
+
+	const api = import.meta.env.VITE_SERVER_API_URL;
 	let productName = '';
 	let productDescription = '';
 	let images: File[] = [];
@@ -24,7 +29,7 @@
 		images = images.filter((_, i) => i !== index);
 		imagePreviews = imagePreviews.filter((_, i) => i !== index);
 	}
-	function handleSubmit() {
+	async function handleSubmit() {
 		if (!productName || !productDescription || images.length === 0) {
 			alert('모든 필드를 입력해주세요.');
 			return;
@@ -34,20 +39,27 @@
 		formData.append('description', productDescription);
 		images.forEach((img) => formData.append('images', img));
 
-		fetch('/api/products', {
-			method: 'POST',
-			body: formData
-		}).then((res) => {
-			if (res.ok) {
-				alert('업로드 성공!');
-				productName = '';
-				productDescription = '';
-				images = [];
-				imagePreviews = [];
-			} else {
-				alert('업로드 실패');
+		try {
+			let response: any = await axios.post(`${VITE_SERVER_API_URL}/api/products`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${$user?.userToken ?? ''}`
+				}
+			});
+			response = response?.data;
+			if (!response?.success) {
+				alert(`업로드 실패. ${response?.message ?? ''}`);
+				return;
 			}
-		});
+			alert('업로드 성공!');
+			productName = '';
+			productDescription = '';
+			images = [];
+			imagePreviews = [];
+		} catch (error) {
+			console.error(error);
+			alert('서버 오류로 업로드 실패');
+		}
 	}
 </script>
 
