@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { VITE_SERVER_API_URL } from '$env/static/private';
+	//import { VITE_SERVER_API_URL } from '$env/static/private';
 	import { user } from '$lib/stores/userStore';
 	import axios from 'axios';
 
@@ -41,7 +41,7 @@
 		images.forEach((img) => formData.append('images', img));
 
 		try {
-			let response: any = await axios.post(`${VITE_SERVER_API_URL}/api/products`, formData, {
+			let response: any = await axios.post(`${api}/api/product/product_upload`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					Authorization: `Bearer ${$user?.userToken ?? ''}`
