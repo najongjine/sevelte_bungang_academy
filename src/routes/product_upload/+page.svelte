@@ -8,7 +8,6 @@
 		const target = event.target as HTMLInputElement;
 		if (target.files) {
 			const newFiles = Array.from(target.files);
-
 			// 이미지 누적 저장 및 미리보기 생성
 			for (const file of newFiles) {
 				if (!images.some((f) => f.name === file.name && f.lastModified === file.lastModified)) {
@@ -16,6 +15,8 @@
 					imagePreviews = [...imagePreviews, URL.createObjectURL(file)];
 				}
 			}
+			// ✅ 같은 파일 다시 선택할 수 있도록 초기화
+			target.value = '';
 		}
 	}
 
