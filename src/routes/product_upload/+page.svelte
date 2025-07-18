@@ -4,8 +4,19 @@
 	import axios from 'axios';
 
 	const api = import.meta.env.VITE_SERVER_API_URL;
+	// load 함수에서 전달받은 데이터. query string 사용 방법
+	export let data: {
+		product_idp: number;
+		category_idp: number;
+	};
+	const { product_idp, category_idp } = data;
+
+	console.log(`## product_idp: `, product_idp);
+	console.log(`## category_idp: `, category_idp);
+
 	let productName = '';
 	let productDescription = '';
+	let price = 0;
 	let images: File[] = [];
 	let imagePreviews: string[] = [];
 
@@ -38,6 +49,9 @@
 		const formData = new FormData();
 		formData.append('name', productName);
 		formData.append('description', productDescription);
+		formData.append('price', price + '');
+		formData.append('category_idp', category_idp + '');
+		formData.append('product_idp', product_idp + '');
 		images.forEach((img) => formData.append('images', img));
 
 		try {
@@ -75,6 +89,15 @@
 			<input
 				bind:value={productName}
 				placeholder="상품 이름"
+				class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+			/>
+		</div>
+
+		<div>
+			<label class="block text-sm font-semibold mb-1">가격</label>
+			<input
+				bind:value={price}
+				placeholder="가격"
 				class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 			/>
 		</div>
