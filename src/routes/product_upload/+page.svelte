@@ -25,16 +25,17 @@
 
 	async function fetchProduct() {
 		try {
+			console.log(`## product_idp: ${product_idp}`);
 			const res = await axios.get(`${api}/api/product/get_product_by_idp`, {
 				params: { idp: product_idp }
 			});
-			const response = res.data;
+			const response = res?.data;
 			if (!response?.success) {
 				console.error('❌ 상품 조회 실패:', response?.message);
 				alert(`상품 정보 오류: ${response?.message}`);
 				return;
 			}
-			console.log(`✅ response: `, response?.data);
+			console.log(`✅ response: `, response);
 			productDataFromServer = response?.data;
 			if (productDataFromServer) {
 				productName = productDataFromServer.title;
@@ -63,20 +64,30 @@
 		images = await Promise.all(urls.map((url, i) => urlToFile(url, `image_${i}.jpg`)));
 	}
 
-	function handleImageUpload(event: Event) {
+	async function handleImageUpload(event: Event) {
 		const target = event.target as HTMLInputElement;
-		if (target.files) {
-			const newFiles = Array.from(target.files);
-			// 이미지 누적 저장 및 미리보기 생성
-			for (const file of newFiles) {
-				if (!images.some((f) => f.name === file.name && f.lastModified === file.lastModified)) {
-					images = [...images, file]; // ← reactivity 보장
-					imagePreviews = [...imagePreviews, URL.createObjectURL(file)];
-				}
+		if (!target.files) return;
+
+		const newFiles = Array.from(target.files);
+
+		for (const file of newFiles) {
+			if (!file.type.startsWith('image/')) continue;
+
+			// 중복 체크
+			if (images.some((f) => f.name === file.name && f.lastModified === file.lastModified)) {
+				continue;
 			}
-			// ✅ 같은 파일 다시 선택할 수 있도록 초기화
-			target.value = '';
+
+			const processedFile = await processImage(file);
+
+			images = [...images, processedFile];
+
+			const previewUrl = URL.createObjectURL(processedFile);
+			imagePreviews = [...imagePreviews, previewUrl];
 		}
+
+		// 같은 파일 다시 선택 가능하도록 초기화
+		target.value = '';
 	}
 
 	function removeImage(index: number) {
@@ -118,6 +129,59 @@
 			console.error(error);
 			alert('서버 오류로 업로드 실패');
 		}
+	}
+
+	async function processImage(file: File): Promise<File> {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => {
+				const img = new Image();
+				img.onload = () => {
+					const MAX_DIMENSION = 1080;
+					let { width, height } = img;
+
+					// 리사이즈 필요 여부 확인
+					if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+						const ratio = width / height;
+						if (ratio > 1) {
+							width = MAX_DIMENSION;
+							height = Math.round(MAX_DIMENSION / ratio);
+						} else {
+							height = MAX_DIMENSION;
+							width = Math.round(MAX_DIMENSION * ratio);
+						}
+					}
+
+					// canvas에 그리기
+					const canvas = document.createElement('canvas');
+					canvas.width = width;
+					canvas.height = height;
+					const ctx = canvas.getContext('2d')!;
+					ctx.drawImage(img, 0, 0, width, height);
+
+					// canvas를 webp Blob으로 변환
+					canvas.toBlob(
+						(blob) => {
+							if (blob) {
+								const newFile = new File([blob], file.name.replace(/\.\w+$/, '.webp'), {
+									type: 'image/webp',
+									lastModified: Date.now()
+								});
+								resolve(newFile);
+							} else {
+								reject(new Error('webp 변환 실패'));
+							}
+						},
+						'image/webp',
+						0.9 // 품질 (0~1)
+					);
+				};
+				img.onerror = (e) => reject(e);
+				img.src = reader.result as string;
+			};
+			reader.onerror = (e) => reject(e);
+			reader.readAsDataURL(file);
+		});
 	}
 </script>
 
