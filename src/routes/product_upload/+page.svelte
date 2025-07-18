@@ -1,8 +1,8 @@
 <script lang="ts">
 	//import { VITE_SERVER_API_URL } from '$env/static/private';
+	import type { ProductDetail } from '$lib/types/product_type';
 	import { user } from '$lib/stores/userStore';
 	import axios from 'axios';
-
 	const api = import.meta.env.VITE_SERVER_API_URL;
 	// load 함수에서 전달받은 데이터. query string 사용 방법
 	export let data: {
@@ -11,14 +11,57 @@
 	};
 	const { product_idp, category_idp } = data;
 
-	console.log(`## product_idp: `, product_idp);
-	console.log(`## category_idp: `, category_idp);
-
 	let productName = '';
 	let productDescription = '';
 	let price = 0;
 	let images: File[] = [];
 	let imagePreviews: string[] = [];
+
+	let productDataFromServer: ProductDetail | null = null;
+
+	$: if (product_idp) {
+		fetchProduct();
+	}
+
+	async function fetchProduct() {
+		try {
+			const res = await axios.get(`${api}/api/product/get_product_by_idp`, {
+				params: { idp: product_idp }
+			});
+			const response = res.data;
+			if (!response?.success) {
+				console.error('❌ 상품 조회 실패:', response?.message);
+				alert(`상품 정보 오류: ${response?.message}`);
+				return;
+			}
+			console.log(`✅ response: `, response?.data);
+			productDataFromServer = response?.data;
+			if (productDataFromServer) {
+				productName = productDataFromServer.title;
+				productDescription = productDataFromServer.content;
+				price = productDataFromServer.price;
+				await initImagesFromServer(productDataFromServer); // ✅ 이미지 초기화
+			}
+		} catch (error: any) {
+			console.error('❌ 상품 조회 실패:', error?.message);
+			alert(`상품 정보를 불러오는 중 오류 발생! ${error?.message ?? ''}`);
+		}
+	}
+	async function urlToFile(url: string, filename: string): Promise<File> {
+		const response = await fetch(url);
+		const blob = await response.blob();
+		const ext = url.split('.').pop()?.split('?')[0] ?? 'jpg'; // 확장자 추정
+		return new File([blob], filename, { type: blob.type });
+	}
+	async function initImagesFromServer(product: ProductDetail) {
+		const urls = product.imgs.map((img) => img.img_url);
+
+		// 이미지 미리보기는 URL 그대로 사용 가능
+		imagePreviews = [...urls];
+
+		// File[] 만들기
+		images = await Promise.all(urls.map((url, i) => urlToFile(url, `image_${i}.jpg`)));
+	}
 
 	function handleImageUpload(event: Event) {
 		const target = event.target as HTMLInputElement;
