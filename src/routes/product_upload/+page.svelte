@@ -25,7 +25,6 @@
 	fetchCategories();
 	$: if (!category_idp) {
 		category_idp = 4;
-		//let selectedCategoryId: number = categories[0].idp;
 	}
 	$: if (product_idp) {
 		fetchProduct();
