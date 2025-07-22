@@ -13,6 +13,7 @@
 	};
 	let { product_idp, category_idp } = data;
 
+	let categories: Category[] = [];
 	let productName = '';
 	let productDescription = '';
 	let price = 0;
@@ -39,13 +40,7 @@
 			}
 			console.log(`✅ response: `, response);
 			//[{"idp":4,"category_name":"먹이"}
-			productDataFromServer = response?.data;
-			if (productDataFromServer) {
-				productName = productDataFromServer.title;
-				productDescription = productDataFromServer.content;
-				price = productDataFromServer.price;
-				await initImagesFromServer(productDataFromServer); // ✅ 이미지 초기화
-			}
+			categories = response?.data;
 		} catch (error: any) {
 			console.error('❌ 상품 조회 실패:', error?.message);
 			alert(`상품 정보를 불러오는 중 오류 발생! ${error?.message ?? ''}`);
