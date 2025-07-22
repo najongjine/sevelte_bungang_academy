@@ -22,8 +22,10 @@
 
 	let productDataFromServer: ProductDetail | null = null;
 
+	fetchCategories();
 	$: if (!category_idp) {
 		category_idp = 4;
+		//let selectedCategoryId: number = categories[0].idp;
 	}
 	$: if (product_idp) {
 		fetchProduct();
@@ -38,9 +40,10 @@
 				alert(`카테고리 가져오기 오류: ${response?.message}`);
 				return;
 			}
-			console.log(`✅ response: `, response);
+
 			//[{"idp":4,"category_name":"먹이"}
 			categories = response?.data;
+			console.log(`✅ category: `, categories);
 		} catch (error: any) {
 			console.error('❌ 상품 조회 실패:', error?.message);
 			alert(`상품 정보를 불러오는 중 오류 발생! ${error?.message ?? ''}`);
@@ -216,6 +219,19 @@
 
 	<!-- 입력 폼 -->
 	<div class="space-y-4">
+		<!-- 카테고리 선택 -->
+		<div>
+			<label class="block text-sm font-semibold mb-1">카테고리 {category_idp}</label>
+			<select
+				bind:value={category_idp}
+				class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+			>
+				{#each categories as category}
+					<option value={category.idp}>{category.category_name}</option>
+				{/each}
+			</select>
+		</div>
+
 		<div>
 			<label class="block text-sm font-semibold mb-1">상품 이름</label>
 			<input
