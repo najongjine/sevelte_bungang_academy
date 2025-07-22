@@ -3,6 +3,8 @@
 	import type { ProductDetail } from '$lib/types/product_type';
 	import { user } from '$lib/stores/userStore';
 	import axios from 'axios';
+	import { goto } from '$app/navigation';
+
 	const api = import.meta.env.VITE_SERVER_API_URL;
 	// load 함수에서 전달받은 데이터. query string 사용 방법
 	export let data: {
@@ -125,6 +127,7 @@
 			productDescription = '';
 			images = [];
 			imagePreviews = [];
+			goto('/');
 		} catch (error) {
 			console.error(error);
 			alert('서버 오류로 업로드 실패');
