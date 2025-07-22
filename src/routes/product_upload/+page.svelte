@@ -11,7 +11,7 @@
 		product_idp: number;
 		category_idp: number;
 	};
-	const { product_idp, category_idp } = data;
+	let { product_idp, category_idp } = data;
 
 	let productName = '';
 	let productDescription = '';
@@ -21,8 +21,36 @@
 
 	let productDataFromServer: ProductDetail | null = null;
 
+	$: if (!category_idp) {
+		category_idp = 4;
+	}
 	$: if (product_idp) {
 		fetchProduct();
+	}
+
+	async function fetchCategories() {
+		try {
+			const res = await axios.get(`${api}/api/product/get_product_by_idp`, {
+				params: { idp: product_idp }
+			});
+			const response = res?.data;
+			if (!response?.success) {
+				console.error('❌ 상품 조회 실패:', response?.message);
+				alert(`상품 정보 오류: ${response?.message}`);
+				return;
+			}
+			console.log(`✅ response: `, response);
+			productDataFromServer = response?.data;
+			if (productDataFromServer) {
+				productName = productDataFromServer.title;
+				productDescription = productDataFromServer.content;
+				price = productDataFromServer.price;
+				await initImagesFromServer(productDataFromServer); // ✅ 이미지 초기화
+			}
+		} catch (error: any) {
+			console.error('❌ 상품 조회 실패:', error?.message);
+			alert(`상품 정보를 불러오는 중 오류 발생! ${error?.message ?? ''}`);
+		}
 	}
 
 	async function fetchProduct() {
