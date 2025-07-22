@@ -30,16 +30,15 @@
 
 	async function fetchCategories() {
 		try {
-			const res = await axios.get(`${api}/api/product/get_product_by_idp`, {
-				params: { idp: product_idp }
-			});
+			const res = await axios.get(`${api}/api/product/get_category_list`, {});
 			const response = res?.data;
 			if (!response?.success) {
-				console.error('❌ 상품 조회 실패:', response?.message);
-				alert(`상품 정보 오류: ${response?.message}`);
+				console.error('❌ 카테고리 가져오기 실패:', response?.message);
+				alert(`카테고리 가져오기 오류: ${response?.message}`);
 				return;
 			}
 			console.log(`✅ response: `, response);
+			//[{"idp":4,"category_name":"먹이"}
 			productDataFromServer = response?.data;
 			if (productDataFromServer) {
 				productName = productDataFromServer.title;
