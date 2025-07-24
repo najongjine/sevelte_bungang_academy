@@ -9,9 +9,9 @@
 
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
 	{#each products as p}
-		<div class="border rounded shadow-sm hover:shadow-md transition bg-white">
+		<div class="border rounded shadow-sm hover:shadow-md transition bg-white max-w-[200px]">
 			<a href={`/product_detail?product_idp=${p?.idp}`}>
-				<div class="w-full aspect-square overflow-hidden">
+				<div class="w-full h-[200px] overflow-hidden">
 					<img
 						src={p?.imgs[0]?.img_url ?? '/default.png'}
 						alt={p?.title}
