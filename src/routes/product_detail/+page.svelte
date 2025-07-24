@@ -61,10 +61,8 @@
 				<img
 					src={image?.img_url ?? ''}
 					alt="썸네일"
-					class="w-20 h-20 rounded-md border hover:shadow-lg cursor-pointer object-cover {selectedImage ===
-					image?.img_url
-						? 'ring-2 ring-blue-500'
-						: ''}"
+					class="w-[250px] h-[250px] object-contain rounded-md border hover:shadow-lg cursor-pointer
+    {selectedImage === image?.img_url ? 'ring-2 ring-blue-500' : ''}"
 					on:click={() => selectImage(image?.img_url ?? '')}
 				/>
 			{/each}
