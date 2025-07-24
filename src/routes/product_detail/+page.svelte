@@ -1,8 +1,12 @@
 <script lang="ts">
-	export let id: string;
+	export let data: {
+		product_idp: number;
+	};
+	let { product_idp } = data;
+	console.log(`## product_idp: ${product_idp}`);
 
 	const product = {
-		id,
+		id: 0,
 		name: '멋진 티셔츠',
 		price: 39000,
 		description: '편하고 멋진 데일리 티셔츠입니다.',
