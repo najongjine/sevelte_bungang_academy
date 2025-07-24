@@ -3,6 +3,7 @@
 	import ProductList from '$lib/components/ProductList.svelte';
 	import type { ProductDetail } from '$lib/types/product_type';
 	import axios from 'axios';
+	import { onMount } from 'svelte';
 
 	const api = import.meta.env.VITE_SERVER_API_URL;
 
@@ -26,10 +27,13 @@
 			if (!products?.length) guide_msg = `데이터가 없습니다.`;
 		} catch (err: any) {
 			alert(`서버 에러. ${err?.message ?? ''}`);
+			return;
 		} finally {
 		}
 	};
-	fetchProductList();
+	onMount(() => {
+		fetchProductList();
+	});
 </script>
 
 <Banner />
