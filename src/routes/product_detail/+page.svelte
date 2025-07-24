@@ -30,7 +30,7 @@
 		<img
 			src={selectedImage}
 			alt="대표 이미지"
-			class="w-full rounded-xl border shadow-md aspect-square object-cover"
+			class="w-full max-h-[450px] rounded-xl border shadow-md object-contain mx-auto"
 		/>
 
 		<div class="flex gap-3 mt-4">
