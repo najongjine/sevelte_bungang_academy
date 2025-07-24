@@ -11,7 +11,7 @@
 	{#each products as p}
 		<div class="border rounded shadow-sm hover:shadow-md transition">
 			<a href={`/product_detail?product_idp=${p?.idp}`}>
-				<img src={p?.imgs[0].img_url} alt={p?.title} class="w-full h-auto" />
+				<img src={p?.imgs[0]?.img_url} alt={p?.title} class="w-full h-auto" />
 				<div class="p-2">
 					<h3 class="text-sm font-medium truncate">{p?.title}</h3>
 					<p class="text-red-500 font-bold mt-1">{p?.price}</p>
