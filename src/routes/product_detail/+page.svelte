@@ -1,9 +1,40 @@
 <script lang="ts">
+	import type { ProductDetail } from '$lib/types/product_type';
+	import { user } from '$lib/stores/userStore';
+	import axios from 'axios';
+	import { goto } from '$app/navigation';
+	const api = import.meta.env.VITE_SERVER_API_URL;
+
 	export let data: {
 		product_idp: number;
 	};
 	let { product_idp } = data;
-	console.log(`## product_idp: ${product_idp}`);
+
+	let productData: ProductDetail | null = null;
+
+	$: if (product_idp) {
+		fetchProduct();
+	}
+
+	async function fetchProduct() {
+		try {
+			console.log(`## product_idp: ${product_idp}`);
+			const res = await axios.get(`${api}/api/product/get_product_by_idp`, {
+				params: { idp: product_idp }
+			});
+			const response = res?.data;
+			if (!response?.success) {
+				console.error('❌ 상품 조회 실패:', response?.message);
+				alert(`상품 정보 오류: ${response?.message}`);
+				return;
+			}
+			console.log(`✅ response: `, response);
+			productData = response?.data;
+		} catch (error: any) {
+			console.error('❌ 상품 조회 실패:', error?.message);
+			alert(`상품 정보를 불러오는 중 오류 발생! ${error?.message ?? ''}`);
+		}
+	}
 
 	const product = {
 		id: 0,
