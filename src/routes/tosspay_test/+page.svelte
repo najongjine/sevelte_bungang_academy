@@ -1,23 +1,75 @@
-<!-- src/lib/components/TossPaymentButton.svelte -->
 <script lang="ts">
-	let clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'; // 테스트용 클라이언트 키
-	let orderId = `order-${Date.now()}`;
-	let orderName = '테스트 상품';
-	let customerName = '홍길동';
-	let amount = 1000;
+	import { onMount } from 'svelte';
+	import { loadTossPayments, ANONYMOUS } from '@tosspayments/tosspayments-sdk';
+	import { writable } from 'svelte/store';
 
-	function requestPayment() {
-		const tossPayments = (window as any).TossPayments(clientKey);
+	const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
+	const customerKey = 'SXDYz9EymhIll8yx-5h_2';
 
-		tossPayments.requestPayment('카드', {
-			amount,
-			orderId,
-			orderName,
-			customerName,
-			successUrl: window.location.origin + '/payment/success',
-			failUrl: window.location.origin + '/payment/fail'
-		});
+	const amount = writable({ currency: 'KRW', value: 500 });
+	let ready = false;
+
+	let widgets: any = null;
+
+	onMount(async () => {
+		const tossPayments = await loadTossPayments(clientKey);
+		widgets = tossPayments.widgets({ customerKey });
+
+		await widgets.setAmount({ currency: 'KRW', value: 50000 });
+
+		await Promise.all([
+			widgets.renderPaymentMethods({
+				selector: '#payment-method',
+				variantKey: 'DEFAULT'
+			}),
+			widgets.renderAgreement({
+				selector: '#agreement',
+				variantKey: 'AGREEMENT'
+			})
+		]);
+
+		ready = true;
+	});
+
+	function toggleCoupon(event: Event) {
+		const checked = (event.target as HTMLInputElement).checked;
+		const newValue = checked ? 45000 : 50000;
+		amount.set({ currency: 'KRW', value: newValue });
+		widgets?.setAmount({ currency: 'KRW', value: newValue });
+	}
+
+	async function requestPayment() {
+		if (!widgets) return;
+		try {
+			await widgets.requestPayment({
+				orderId: 'order123456',
+				orderName: '토스 티셔츠 외 2건',
+				successUrl: window.location.origin + '/payment/success',
+				failUrl: window.location.origin + '/payment/fail',
+				customerEmail: 'customer123@gmail.com',
+				customerName: '김토스',
+				customerMobilePhone: '01012341234'
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	}
 </script>
 
-<button on:click={requestPayment}> 결제하기 </button>
+<div class="wrapper">
+	<div class="box_section">
+		<!-- 결제 UI -->
+		<div id="payment-method" />
+		<!-- 이용약관 UI -->
+		<div id="agreement" />
+
+		<!-- 쿠폰 체크박스 -->
+		<label for="coupon-box">
+			<input id="coupon-box" type="checkbox" on:change={toggleCoupon} />
+			<span>5,000원 쿠폰 적용</span>
+		</label>
+
+		<!-- 결제 버튼 -->
+		<button on:click={requestPayment} disabled={ready === false}> 결제하기 </button>
+	</div>
+</div>
