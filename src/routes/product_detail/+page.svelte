@@ -79,7 +79,9 @@
 			</p>
 			<p class="text-gray-600 leading-relaxed">{productData?.content ?? ''}</p>
 		</div>
-
+	</div>
+	<!-- 부모에서 -->
+	<div style="display: flex; width: 100%;">
 		<Button
 			label="수정"
 			textColor="#ffffff"
@@ -87,6 +89,14 @@
 			size="lg"
 			align="left"
 			onClick={handleUpdateClick}
+		/>
+		<Button
+			label="삭제"
+			textColor="#ffffff"
+			bgColor="#da4848"
+			size="lg"
+			align="right"
+			onClick={() => {}}
 		/>
 	</div>
 </div>
