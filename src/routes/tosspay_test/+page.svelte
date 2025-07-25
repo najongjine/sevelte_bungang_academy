@@ -15,7 +15,7 @@
 		const tossPayments = await loadTossPayments(clientKey);
 		widgets = tossPayments.widgets({ customerKey });
 
-		await widgets.setAmount({ currency: 'KRW', value: 500 });
+		await widgets.setAmount({ currency: 'KRW', value: amount });
 
 		await Promise.all([
 			widgets.renderPaymentMethods({
