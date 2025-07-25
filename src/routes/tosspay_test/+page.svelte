@@ -15,7 +15,7 @@
 		const tossPayments = await loadTossPayments(clientKey);
 		widgets = tossPayments.widgets({ customerKey });
 
-		await widgets.setAmount({ currency: 'KRW', value: 50000 });
+		await widgets.setAmount({ currency: 'KRW', value: 500 });
 
 		await Promise.all([
 			widgets.renderPaymentMethods({
@@ -33,7 +33,7 @@
 
 	function toggleCoupon(event: Event) {
 		const checked = (event.target as HTMLInputElement).checked;
-		const newValue = checked ? 45000 : 50000;
+		const newValue = checked ? 450 : 500;
 		amount.set({ currency: 'KRW', value: newValue });
 		widgets?.setAmount({ currency: 'KRW', value: newValue });
 	}
