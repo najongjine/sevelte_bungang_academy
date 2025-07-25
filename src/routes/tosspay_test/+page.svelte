@@ -6,7 +6,7 @@
 	const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 	const customerKey = 'SXDYz9EymhIll8yx-5h_2';
 
-	const amount = writable({ currency: 'KRW', value: 500 });
+	let amount = 500;
 	let ready = false;
 
 	let widgets: any = null;
@@ -34,7 +34,7 @@
 	function toggleCoupon(event: Event) {
 		const checked = (event.target as HTMLInputElement).checked;
 		const newValue = checked ? 450 : 500;
-		amount.set({ currency: 'KRW', value: newValue });
+		amount = newValue;
 		widgets?.setAmount({ currency: 'KRW', value: newValue });
 	}
 
