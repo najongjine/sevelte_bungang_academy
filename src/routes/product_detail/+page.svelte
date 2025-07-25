@@ -4,6 +4,7 @@
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
 	import defaultImage from '$lib/assets/no-image.webp';
+	import Button from '$lib/components/Button.svelte';
 	const api = import.meta.env.VITE_SERVER_API_URL;
 
 	export let data: {
@@ -42,7 +43,7 @@
 	function selectImage(image: string) {
 		selectedImage = image;
 	}
-	function addToCart() {
+	function handleUpdateClick() {
 		alert('장바구니에 담겼습니다.');
 	}
 </script>
@@ -79,11 +80,13 @@
 			<p class="text-gray-600 leading-relaxed">{productData?.content ?? ''}</p>
 		</div>
 
-		<button
-			class="mt-8 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-200"
-			on:click={addToCart}
-		>
-			🛒 장바구니에 담기
-		</button>
+		<Button
+			label="수정"
+			textColor="#ffffff"
+			bgColor="#28a745"
+			size="lg"
+			align="left"
+			onClick={handleUpdateClick}
+		/>
 	</div>
 </div>
