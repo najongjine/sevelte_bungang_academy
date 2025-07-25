@@ -43,8 +43,29 @@
 	function selectImage(image: string) {
 		selectedImage = image;
 	}
-	function handleUpdateClick() {
-		alert('장바구니에 담겼습니다.');
+	async function handleDeleteClick() {
+		if (!confirm(`정말 삭제하시겠습니까?`)) {
+			return;
+		}
+		let response: any = await axios.post(
+			`${api}/api/product/product_upload`,
+			{
+				product_idp: product_idp
+			},
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${$user?.userToken ?? ''}`
+				}
+			}
+		);
+		response = response?.data;
+		if (!response?.success) {
+			alert(`삭제 실패. ${response?.message ?? ''}`);
+			return;
+		}
+		alert('삭제 성공!');
+		goto('/');
 	}
 </script>
 
@@ -82,21 +103,23 @@
 	</div>
 	<!-- 부모에서 -->
 	<div style="display: flex; width: 100%;">
-		<Button
-			label="수정"
-			textColor="#ffffff"
-			bgColor="#28a745"
-			size="lg"
-			align="left"
-			onClick={handleUpdateClick}
-		/>
+		<a href={`/product_upload?product_idp=${product_idp}`}>
+			<Button
+				label="수정"
+				textColor="#ffffff"
+				bgColor="#28a745"
+				size="lg"
+				align="left"
+				onClick={() => {}}
+			/>
+		</a>
 		<Button
 			label="삭제"
 			textColor="#ffffff"
 			bgColor="#da4848"
 			size="lg"
 			align="right"
-			onClick={() => {}}
+			onClick={handleDeleteClick}
 		/>
 	</div>
 </div>
