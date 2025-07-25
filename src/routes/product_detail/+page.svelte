@@ -48,7 +48,7 @@
 			return;
 		}
 		let response: any = await axios.post(
-			`${api}/api/product/product_upload`,
+			`${api}/api/product/product_delete`,
 			{
 				product_idp: product_idp
 			},
