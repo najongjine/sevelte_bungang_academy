@@ -44,8 +44,8 @@
 			await widgets.requestPayment({
 				orderId: 'order123456',
 				orderName: '토스 티셔츠 외 2건',
-				successUrl: window.location.origin + '/payment/success',
-				failUrl: window.location.origin + '/payment/fail',
+				successUrl: window.location.origin + '/tosspay_success',
+				failUrl: window.location.origin + '/tosspay_fail',
 				customerEmail: 'customer123@gmail.com',
 				customerName: '김토스',
 				customerMobilePhone: '01012341234'
