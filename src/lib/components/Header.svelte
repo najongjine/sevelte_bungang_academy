@@ -1,5 +1,18 @@
 <!-- src/lib/components/Header.svelte -->
 <script lang="ts">
+	import { get } from 'svelte/store';
+	import { user } from '$lib/stores/userStore';
+
+	const currentUser = get(user);
+
+	async function logout() {
+		try {
+			user.set(null);
+		} catch (error: any) {
+			console.error('❌ 로그아웃 실패:', error?.message);
+			alert('로그아웃 중 오류 발생!');
+		}
+	}
 </script>
 
 <header>
@@ -12,7 +25,12 @@
 			class="flex-1 border px-4 py-2 rounded text-sm"
 			placeholder="상품명, 지역명, @상점명 입력"
 		/>
-		<button class="border px-4 py-2 text-sm">로그인</button>
+		{#if currentUser?.userData?.idp}
+			<div>환영합니다. {currentUser?.userData?.displayname ?? ''}</div>
+			<button on:click={logout}> logout </button>
+		{:else}
+			<a href="/login"><button class="border px-4 py-2 text-sm">로그인</button></a>
+		{/if}
 	</div>
 
 	<!-- 상품 올리기: 왼쪽으로 넓게 들여쓰기 -->

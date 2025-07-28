@@ -122,7 +122,9 @@
 		/>
 	</div>
 	<div>
-		<a href={`/tosspay_test`}>
+		<a
+			href={`/tosspay_test?product_idp=${product_idp}&user_idp=${$user?.userData?.idp ?? 0}&amount=${productData?.price ?? 0}&title=${productData?.title}`}
+		>
 			<button>구매</button>
 		</a>
 	</div>
