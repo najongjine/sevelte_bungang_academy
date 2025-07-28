@@ -4,7 +4,7 @@
 	import { writable } from 'svelte/store';
 
 	const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-	const customerKey = 'SXDYz9EymhIll8yx-5h_2';
+	let customerKey = 'SXDYz9EymhIll8yx-5h_2';
 
 	export let data: {
 		product_idp: number;
