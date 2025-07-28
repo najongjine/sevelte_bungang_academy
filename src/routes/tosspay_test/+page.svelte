@@ -4,7 +4,6 @@
 	import { writable } from 'svelte/store';
 
 	const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-	let customerKey = 'SXDYz9EymhIll8yx-5h_2';
 
 	export let data: {
 		product_idp: number;
@@ -14,6 +13,8 @@
 	};
 	let { product_idp, user_idp, amount, title } = data;
 
+	let customerKey = `${user_idp}__${product_idp}__${Date.now()}`;
+	let orderId = `${user_idp}__${product_idp}__${Date.now()}`;
 	let ready = false;
 
 	let widgets: any = null;
