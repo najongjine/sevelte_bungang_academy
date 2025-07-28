@@ -122,7 +122,7 @@
 		/>
 	</div>
 	<div>
-		<a href={`/product_detail?product_idp=${p?.idp}`}>
+		<a href={`/tosspay_test`}>
 			<button>구매</button>
 		</a>
 	</div>
