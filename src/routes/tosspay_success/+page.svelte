@@ -13,10 +13,11 @@
 		amount: number;
 	};
 	let { paymentType, orderId, paymentKey, amount } = data;
+	let guideMessage = '결제 확인중...';
 
 	onMount(async () => {
 		try {
-			const response = await axios.post(
+			let response: any = await axios.post(
 				`${api}/api/tosspay/confirm`,
 				{
 					// 요청 본문 (JSON 형식)
@@ -33,19 +34,24 @@
 					}
 				}
 			);
-
-			console.log('응답 데이터:', response.data);
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				console.error('에러 응답:', error.response?.data);
-			} else {
-				console.error('예상치 못한 에러:', error);
+			response = response?.data;
+			if (!response?.success) {
+				console.error('❌ 결제 검증 실패:', response?.message);
+				alert(`결제 검증 오류: ${response?.message}`);
+				guideMessage = `결제 검증 오류. <br/> ${response?.message ?? ''}`;
+				return;
 			}
+			response = response?.data;
+			guideMessage = `결제 성공!`;
+		} catch (error: any) {
+			console.error('❌ 서버 에러:', error?.message ?? '');
+			guideMessage = `서버 에러! <br/> ${error?.message ?? ''}`;
+			alert(`서버 에러! ${error?.message ?? ''}`);
 		}
 	});
 </script>
 
-<h1>결제 성공</h1>
+<h1>${guideMessage}</h1>
 <p>paymentType: {paymentType}</p>
 <p>결제 키: {paymentKey}</p>
 <p>주문 ID: {orderId}</p>
