@@ -16,15 +16,13 @@
 </script>
 
 <header>
-	<!-- 헤더 (로고 + 검색창 + 로그인) -->
-	<div class="w-full px-4 py-3 flex items-center gap-4">
-		<h1 class="text-xl font-bold text-purple-700">
-			<a href="/">나의장터</a>
-		</h1>
-		<input
-			class="flex-1 border px-4 py-2 rounded text-sm"
-			placeholder="상품명, 지역명, @상점명 입력"
-		/>
+	<div class="left-box" style="display: flex; align-items: center;">
+		<div class="logo">나의장터</div>
+		<div class="search-box">
+			<input type="text" placeholder="상품명, 지역명, @상점명 입력" />
+		</div>
+	</div>
+	<div class="right-box">
 		{#if currentUser?.userData?.idp}
 			<div>환영합니다. {currentUser?.userData?.displayname ?? ''}</div>
 			<button on:click={logout}> logout </button>
@@ -32,17 +30,54 @@
 			<a href="/login"><button class="border px-4 py-2 text-sm">로그인</button></a>
 		{/if}
 	</div>
-
-	<!-- 상품 올리기: 왼쪽으로 넓게 들여쓰기 -->
-	<div class="w-full pt-4 text-sm">
-		<a href="/product_upload"
-			><button class="text-black hover:underline" style="margin-left: 7rem;">
-				상품 올리기
-			</button></a
-		>
-		<br /><br />
-	</div>
-
-	<!-- 구분선 -->
-	<hr class="border-t-2 border-gray-400" />
 </header>
+
+<style>
+	header {
+		background-color: #f8f8f8;
+		border-bottom: 2px solid #ddd;
+		padding: 12px 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-family: 'Segoe UI', sans-serif;
+	}
+
+	.logo {
+		font-size: 24px;
+		font-weight: bold;
+		color: #5e2ca5; /* 퍼플 계열 포인트 */
+		margin-right: 30px;
+		white-space: nowrap;
+	}
+
+	.search-box input {
+		width: 320px;
+		padding: 8px 12px;
+		font-size: 14px;
+		border: 1px solid #aaa;
+		border-radius: 4px;
+	}
+
+	.right-box {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		font-size: 14px;
+	}
+
+	button.logout {
+		background-color: #5e2ca5;
+		color: white;
+		border: none;
+		padding: 6px 12px;
+		border-radius: 4px;
+		cursor: pointer;
+		font-weight: bold;
+		font-size: 13px;
+	}
+
+	button.logout:hover {
+		background-color: #4a218b;
+	}
+</style>
