@@ -2,6 +2,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import axios from 'axios';
+	import { user } from '$lib/stores/userStore';
+	import { goto } from '$app/navigation';
+	const api = import.meta.env.VITE_SERVER_API_URL;
 
 	export let data: {
 		paymentType: string;
@@ -14,17 +17,19 @@
 	onMount(async () => {
 		try {
 			const response = await axios.post(
-				'https://example.com/api/endpoint',
+				`${api}/api/tosspay/confirm`,
 				{
 					// 요청 본문 (JSON 형식)
-					key1: 'value1',
-					key2: 'value2'
+					paymentKey: paymentKey,
+					orderId: orderId,
+					amount: amount,
+					paymentType: paymentType
 				},
 				{
 					// 옵션 (헤더 등)
 					headers: {
 						'Content-Type': 'application/json',
-						Authorization: 'Bearer your-token-here'
+						Authorization: `Bearer ${$user?.userToken ?? ''}`
 					}
 				}
 			);

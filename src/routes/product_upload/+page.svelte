@@ -53,7 +53,11 @@
 		try {
 			console.log(`## product_idp: ${product_idp}`);
 			const res = await axios.get(`${api}/api/product/get_product_by_idp`, {
-				params: { idp: product_idp }
+				params: { idp: product_idp },
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${$user?.userToken ?? ''}`
+				}
 			});
 			const response = res?.data;
 			if (!response?.success) {

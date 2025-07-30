@@ -3,8 +3,6 @@
 	import { get } from 'svelte/store';
 	import { user } from '$lib/stores/userStore';
 
-	const currentUser = get(user);
-
 	async function logout() {
 		try {
 			user.set(null);
@@ -23,8 +21,8 @@
 		</div>
 	</div>
 	<div class="right-box">
-		{#if currentUser?.userData?.idp}
-			<div>환영합니다. {currentUser?.userData?.displayname ?? ''}</div>
+		{#if $user?.userData?.idp}
+			<div>환영합니다. {$user?.userData?.displayname ?? ''}</div>
 			<a href="/product_upload"><button class="action-button">상품 올리기</button></a>
 			<button on:click={logout}> logout </button>
 		{:else}
