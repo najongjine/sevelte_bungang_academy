@@ -17,7 +17,7 @@
 
 <header>
 	<div class="left-box" style="display: flex; align-items: center;">
-		<div class="logo">나의장터</div>
+		<a href="/"><div class="logo">나의장터</div></a>
 		<div class="search-box">
 			<input type="text" placeholder="상품명, 지역명, @상점명 입력" />
 		</div>
@@ -25,6 +25,7 @@
 	<div class="right-box">
 		{#if currentUser?.userData?.idp}
 			<div>환영합니다. {currentUser?.userData?.displayname ?? ''}</div>
+			<a href="/product_upload"><button class="action-button">상품 올리기</button></a>
 			<button on:click={logout}> logout </button>
 		{:else}
 			<a href="/login"><button class="border px-4 py-2 text-sm">로그인</button></a>
@@ -66,6 +67,7 @@
 		font-size: 14px;
 	}
 
+	button.action-button,
 	button.logout {
 		background-color: #5e2ca5;
 		color: white;
@@ -75,6 +77,18 @@
 		cursor: pointer;
 		font-weight: bold;
 		font-size: 13px;
+	}
+	button.action-button {
+		background-color: #5e2ca5;
+		color: white;
+	}
+
+	button.action-button:hover {
+		background-color: #4a218b;
+	}
+	button.logout {
+		background-color: #999;
+		color: white;
 	}
 
 	button.logout:hover {
